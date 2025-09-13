@@ -1,0 +1,64 @@
+# =========================================================================
+# === This is the correct backend configuration for local development ===
+# The 'test-repo' backend tells the CMS to work directly with local files
+# without asking for a login. It does not connect to GitHub.
+# =========================================================================
+backend:
+  name: test-repo
+
+# Media configuration with Cloudinary
+media_library:
+  name: cloudinary
+  config:
+    cloud_name: 'YOUR_CLOUD_NAME_HERE' # IMPORTANT: Replace with your Cloudinary cloud name
+    api_key: '685338551245488'
+    multiple: true
+    folder: photofirm
+
+# Where to store uploaded media if not using Cloudinary (for local testing)
+media_folder: "src/assets/images/uploads"
+public_folder: "/assets/images/uploads"
+
+# Site configuration
+site_url: https://photofirm.com
+display_url: https://photofirm.com
+logo_url: /favicon.svg
+
+# Collections are the different types of content you can edit.
+collections:
+  # Home page configuration
+  - name: "home"
+    label: "Home Page"
+    files:
+      - label: "Home Page Content"
+        name: "home"
+        file: "src/content/home.md"
+        fields:
+          - { label: "Title", name: "title", widget: "string" }
+          - { label: "Hero Title", name: "hero_title", widget: "string" }
+          - { label: "Hero Subtitle", name: "hero_subtitle", widget: "text" }
+          
+  # Portfolio collection
+  - name: "portfolio"
+    label: "Portfolio"
+    folder: "src/content/portfolio"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Date", name: "date", widget: "datetime" }
+      - { label: "Cover Image", name: "cover_image", widget: "image" }
+      - { label: "Description", name: "description", widget: "markdown" }
+      
+  # Blog collection
+  - name: "blog"
+    label: "Blog Posts"
+    folder: "src/content/blog"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Date", name: "date", widget: "datetime" }
+      - { label: "Excerpt", name: "excerpt", widget: "text" }
+      - { label: "Featured Image", name: "featured_image", widget: "image" }
+      - { label: "Body", name: "body", widget: "markdown" }

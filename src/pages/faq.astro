@@ -1,0 +1,45 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+
+const faqs = [
+  { q: "What is your photography style?", a: "Our style is a blend of documentary and fine art. We aim to capture authentic, candid moments with an artistic and timeless quality." },
+  { q: "Do you travel for weddings?", a: "Absolutely! We love destination weddings. We have packages that include travel, or we can create a custom quote for your specific location." },
+  { q: "How many photos will we receive?", a: "For a typical 8-hour wedding, you can expect to receive between 600 to 800 fully edited, high-resolution images." },
+  { q: "What is the turnaround time?", a: "For weddings, our turnaround time for the full gallery is typically 6-8 weeks. For portrait sessions, it's about 2-3 weeks." },
+];
+---
+
+<BaseLayout title="FAQ | PhotoFirm Studio" description="Find answers to frequently asked questions about our photography and videography services.">
+  <Navbar slot="nav" />
+
+  <main>
+    <section class="section-padding bg-white dark:bg-gray-800">
+      <div class="container-custom text-center">
+        <h1 class="text-4xl lg:text-6xl font-serif font-bold text-gray-900 dark:text-white mb-4">Frequently Asked Questions</h1>
+        <p class="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">Your questions, answered.</p>
+      </div>
+    </section>
+
+    <section class="section-padding bg-beige-50 dark:bg-gray-900">
+      <div class="container-custom max-w-4xl mx-auto">
+        <div class="space-y-8">
+          {faqs.map(faq => (
+            <details class="group bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg">
+              <summary class="flex justify-between items-center cursor-pointer font-semibold text-lg text-gray-900 dark:text-white">
+                {faq.q}
+                <svg class="w-5 h-5 transition-transform duration-300 group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+              </summary>
+              <p class="mt-4 text-gray-600 dark:text-gray-300">
+                {faq.a}
+              </p>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer slot="footer" />
+</BaseLayout>

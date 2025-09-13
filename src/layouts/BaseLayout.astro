@@ -1,0 +1,219 @@
+---
+// 1. Correctly import the global stylesheet. This is the modern way in Astro.
+import '/src/styles/globals.css';
+import FloatingCTA from '../components/FloatingCTA.astro';
+
+export interface Props {
+  title: string;
+  description?: string;
+  image?: string;
+  type?: 'website' | 'article';
+  publishedTime?: string;
+  modifiedTime?: string;
+  author?: string;
+  keywords?: string[];
+  noindex?: boolean;
+  canonicalURL?: string;
+}
+
+const {
+  title,
+  description = "PhotoFirm - Premier photography and videography studio specializing in weddings, commercial work, and creative storytelling. Capturing moments that last a lifetime.",
+  image = "/images/og-default.jpg",
+  type = "website",
+  publishedTime,
+  modifiedTime,
+  author = "PhotoFirm Studio",
+  keywords = ["photography", "videography", "wedding photographer", "commercial photography", "portrait photography", "destination wedding", "creative studio"],
+  noindex = false,
+  canonicalURL
+} = Astro.props;
+
+const currentURL = new URL(Astro.request.url);
+const canonical = canonicalURL || currentURL.href;
+const imageURL = image.startsWith('http') ? image : new URL(image, currentURL.origin).href;
+
+// JSON-LD structured data for rich search results
+const jsonLD = {
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "@id": `${currentURL.origin}/#business`,
+  "name": "PhotoFirm Studio",
+  "image": imageURL,
+  "description": description,
+  "url": currentURL.origin,
+  "telephone": "+1-555-0123",
+  "email": "hello@photofirm.com",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "123 Creative Avenue",
+    "addressLocality": "New York",
+    "addressRegion": "NY",
+    "postalCode": "10001",
+    "addressCountry": "US"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": "40.7128",
+    "longitude": "-74.0060"
+  },
+  "openingHours": [
+    "Mo-Fr 09:00-18:00",
+    "Sa 10:00-16:00"
+  ],
+  "priceRange": "$$",
+  "sameAs": [
+    "https://instagram.com/photofirm",
+    "https://facebook.com/photofirm",
+    "https://linkedin.com/company/photofirm"
+  ]
+};
+---
+
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="generator" content={Astro.generator} />
+  
+  <!-- Preconnect to external domains for performance -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://res.cloudinary.com" />
+  
+  <!-- Basic meta tags -->
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <meta name="author" content={author} />
+  <meta name="keywords" content={keywords.join(', ')} />
+  
+  <!-- Robots and indexing -->
+  {noindex && <meta name="robots" content="noindex, nofollow" />}
+  <link rel="canonical" href={canonical} />
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content={type} />
+  <meta property="og:url" content={canonical} />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:image" content={imageURL} />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:site_name" content="PhotoFirm Studio" />
+  <meta property="og:locale" content="en_US" />
+  
+  <!-- Article specific Open Graph tags -->
+  {type === 'article' && publishedTime && <meta property="article:published_time" content={publishedTime} />}
+  {type === 'article' && modifiedTime && <meta property="article:modified_time" content={modifiedTime} />}
+  {type === 'article' && author && <meta property="article:author" content={author} />}
+  
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:url" content={canonical} />
+  <meta name="twitter:title" content={title} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={imageURL} />
+  <meta name="twitter:creator" content="@photofirm" />
+  <meta name="twitter:site" content="@photofirm" />
+  
+  <!-- Favicons and app icons -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <meta name="theme-color" content="#4f46e5" />
+  
+  <!-- Structured Data -->
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLD)} />
+  
+  <!-- 
+    2. The incorrect <link rel="stylesheet" href="/src/styles/global.css" /> 
+    has been removed from here. The 'import' at the top of the file now handles this.
+  -->
+</head>
+
+<body class="bg-beige-50 dark:bg-gray-900">
+  <!-- Skip to content link for accessibility -->
+  <a href="#main-content" class="skip-to-content">Skip to main content</a>
+  
+  <!-- Loading spinner placeholder -->
+  <div id="loading-spinner" class="loading-spinner">
+    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-royal-600"></div>
+  </div>
+
+  <!-- Navigation -->
+  <header class="no-print sticky top-0 z-50">
+    <slot name="nav">
+      <!-- A default Navbar could be placed here if no nav slot is provided -->
+    </slot>
+  </header>
+
+  <!-- Main content -->
+  <main id="main-content" tabindex="-1">
+    <slot />
+  </main>
+
+  <!-- Footer -->
+  <footer class="no-print">
+    <slot name="footer" />
+  </footer>
+
+  <!-- Floating CTA is now part of the base layout -->
+  <FloatingCTA />
+
+  <!-- Global Scripts -->
+  <script is:inline>
+    // Dark mode initialization logic
+    const isDark = localStorage.getItem('darkMode') === 'true' || 
+                   (!('darkMode' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    if (isDark) {
+      document.documentElement.classList.add('dark');
+    }
+
+    // Remove loading spinner after the page has fully loaded
+    window.addEventListener('load', () => {
+      const spinner = document.getElementById('loading-spinner');
+      if (spinner) {
+        spinner.style.display = 'none';
+      }
+    });
+
+    // IntersectionObserver for lazy-loading images with a 'data-lazy' attribute
+    document.addEventListener("DOMContentLoaded", function() {
+      const lazyImages = Array.from(document.querySelectorAll("img[data-lazy]"));
+      if ("IntersectionObserver" in window) {
+        let lazyImageObserver = new IntersectionObserver(function(entries, observer) {
+          entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+              let lazyImage = entry.target;
+              lazyImage.src = lazyImage.dataset.lazy;
+              lazyImage.removeAttribute("data-lazy");
+              lazyImage.classList.add("loaded");
+              lazyImageObserver.unobserve(lazyImage);
+            }
+          });
+        });
+        lazyImages.forEach(img => lazyImageObserver.observe(img));
+      }
+    });
+  </script>
+
+  <!-- 
+    3. Service Worker registration is now commented out to prevent console errors.
+    To enable PWA functionality, create a public/sw.js file and uncomment this block.
+  -->
+  <!--
+  <script is:inline>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then(registration => console.log('Service Worker registered.'))
+          .catch(error => console.log('Service Worker registration failed:', error));
+      });
+    }
+  </script>
+  -->
+</body>
+</html>

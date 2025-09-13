@@ -1,0 +1,47 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<BaseLayout title="Contact Us | PhotoFirm Studio" description="Get in touch with PhotoFirm Studio to book your session or ask a question.">
+  <Navbar slot="nav" />
+
+  <main>
+    <section class="section-padding bg-white dark:bg-gray-800">
+      <div class="container-custom text-center">
+        <h1 class="text-4xl lg:text-6xl font-serif font-bold text-gray-900 dark:text-white mb-4">Let's Create Together</h1>
+        <p class="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+          We'd love to hear about your vision. Fill out the form below or contact us directly.
+        </p>
+      </div>
+    </section>
+
+    <section class="section-padding bg-beige-50 dark:bg-gray-900">
+      <div class="container-custom max-w-4xl mx-auto">
+        <form name="contact" method="POST" data-netlify="true" class="card bg-white dark:bg-gray-800 p-8 space-y-6">
+          <input type="hidden" name="form-name" value="contact" />
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Full Name</label>
+              <input type="text" name="name" id="name" required class="mt-1 block w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-700 shadow-sm">
+            </div>
+            <div>
+              <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Email Address</label>
+              <input type="email" name="email" id="email" required class="mt-1 block w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-700 shadow-sm">
+            </div>
+          </div>
+          <div>
+            <label for="message" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Message</label>
+            <textarea name="message" id="message" rows="6" required class="mt-1 block w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-700 shadow-sm"></textarea>
+          </div>
+          <div class="text-right">
+            <button type="submit" class="btn-primary">Send Message</button>
+          </div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <Footer slot="footer" />
+</BaseLayout>

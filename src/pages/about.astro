@@ -1,0 +1,43 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+import TeamCard from '../components/TeamCard.astro';
+
+const teamMembers = [
+  { name: 'Jane Doe', role: 'Lead Photographer', image: 'https://res.cloudinary.com/demo/image/upload/w_400,h_400,c_fill,g_face/samples/people/woman.jpg', bio: 'With over 15 years of experience, Jane is the artistic eye behind our most iconic shots. Her passion is telling stories through light and emotion.' },
+  { name: 'John Smith', role: 'Lead Videographer', image: 'https://res.cloudinary.com/demo/image/upload/w_400,h_400,c_fill,g_face/samples/people/boy-cinemagraph.jpg', bio: 'John brings moments to life with cinematic flair. He directs our video productions, ensuring every film is a timeless masterpiece.' },
+  { name: 'Alex Ray', role: 'Studio Manager', image: 'https://res.cloudinary.com/demo/image/upload/w_400,h_400,c_fill,g_face/samples/people/smiling-man.jpg', bio: 'Alex is the organizational heart of PhotoFirm, ensuring a seamless experience for every client from booking to final delivery.' },
+];
+---
+
+<BaseLayout title="About Us | PhotoFirm Studio" description="Learn about the passionate team of photographers and videographers at PhotoFirm Studio.">
+  <Navbar slot="nav" />
+
+  <main>
+    <section class="section-padding bg-white dark:bg-gray-800">
+      <div class="container-custom text-center">
+        <h1 class="text-4xl lg:text-6xl font-serif font-bold text-gray-900 dark:text-white mb-4">Our Story</h1>
+        <p class="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+          We are a collective of artists, storytellers, and technical experts united by a single passion: preserving life's most precious moments.
+        </p>
+      </div>
+    </section>
+
+    <section class="section-padding bg-beige-50 dark:bg-gray-900">
+      <div class="container-custom">
+        <div class="text-center mb-16">
+          <h2 class="text-3xl sm:text-4xl font-serif font-bold text-gray-900 dark:text-white mb-4">Meet the Team</h2>
+          <p class="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">The creative minds behind the lens.</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {teamMembers.map(member => (
+            <TeamCard member={member} />
+          ))}
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer slot="footer" />
+</BaseLayout>

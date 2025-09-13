@@ -1,0 +1,20 @@
+---
+export interface Props {
+  member: {
+    name: string;
+    role: string;
+    image: string;
+    bio: string;
+  };
+}
+
+const { member } = Astro.props;
+---
+<div class="card text-center bg-white dark:bg-gray-800">
+  <img src={member.image} alt={`Headshot of ${member.name}`} class="w-32 h-32 rounded-full mx-auto mb-4 object-cover shadow-lg">
+  <h3 class="text-xl font-serif font-semibold text-gray-900 dark:text-white">{member.name}</h3>
+  <p class="text-royal-600 dark:text-royal-400 font-medium mb-4">{member.role}</p>
+  <p class="text-gray-600 dark:text-gray-300">
+    {member.bio}
+  </p>
+</div>

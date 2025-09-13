@@ -1,0 +1,45 @@
+---
+export interface PortfolioItem {
+  id: string;
+  title: string;
+  category: string[];
+  image: string;
+  slug: string;
+  date: string;
+  location?: string;
+}
+
+export interface Props {
+  item: PortfolioItem;
+  index: number;
+}
+
+const { item, index } = Astro.props;
+---
+
+<article
+  class="portfolio-item group cursor-pointer"
+  data-categories={item.category.map(cat => cat.toLowerCase()).join(' ')}
+>
+  <div class="card overflow-hidden h-full bg-white dark:bg-gray-800 p-0">
+    <div class="relative overflow-hidden aspect-w-4 aspect-h-3">
+      <img
+        src={`${item.image}?w=600&h=450&c_fill&q_auto&f_auto`}
+        alt={item.title}
+        class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+        loading={index < 4 ? 'eager' : 'lazy'}
+        decoding="async"
+        width="600"
+        height="450"
+      />
+      <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+    </div>
+    <div class="p-4 sm:p-6">
+      <p class="text-sm font-medium text-royal-600 dark:text-royal-400 capitalize">{item.category.join(', ')}</p>
+      <h3 class="text-lg sm:text-xl font-serif font-semibold text-gray-900 dark:text-white mt-1">
+        {item.title}
+      </h3>
+    </div>
+    <a href={`/portfolio/${item.slug}`} class="absolute inset-0 z-10" aria-label={`View ${item.title} portfolio`}></a>
+  </div>
+</article>

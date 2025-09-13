@@ -1,0 +1,22 @@
+---
+import { getCollection } from 'astro:content';
+import ArticleLayout from '../../layouts/ArticleLayout.astro';
+
+export async function getStaticPaths() {
+  const portfolioEntries = await getCollection('portfolio');
+  return portfolioEntries.map(entry => ({
+    params: { slug: entry.slug },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+
+// Rename cover_image to featured_image for compatibility with ArticleLayout
+const layoutContent = { ...entry.data, featured_image: entry.data.cover_image };
+---
+<ArticleLayout content={layoutContent}>
+  <Content />
+  <!-- You can add a gallery or other custom sections here -->
+</ArticleLayout>
