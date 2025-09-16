@@ -1,6 +1,6 @@
 {
   "name": "PhotoFirm Website Development",
-  "image": "mcr.microsoft.com/devcontainers/javascript-node:1-20-bullseye",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:20",
   "features": {
     "ghcr.io/devcontainers/features/github-cli:1": {}
   },
@@ -47,6 +47,5 @@
       "onAutoForward": "notify"
     }
   },
-  "postCreateCommand": "npm install",
-  "remoteUser": "node"
+  "postCreateCommand": "npm install"
 }
