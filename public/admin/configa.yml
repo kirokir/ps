@@ -1,28 +1,15 @@
-# Use the test-repo backend for local development (no login required)
 backend:
   name: test-repo
 
-# When deploying, you will switch to the git-gateway backend.
-# backend:
-#   name: git-gateway
-#   branch: main
-
-# Media library configuration with your verified credentials
 media_library:
   name: cloudinary
   config:
     cloud_name: "dw4fmucml"
     api_key: "685338551245488"
-media_folder: "src/assets/images/uploads" # Fallback storage location
+media_folder: "src/assets/images/uploads"
 public_folder: "/assets/images/uploads"
 
-# Site & Collection Definitions
-site_url: https://lenvow.com
-display_url: https://lenvow.com
-logo_url: /favicon.svg
-
 collections:
-  # Collection for the single home page
   - name: "home"
     label: "Home Page"
     files:
@@ -34,7 +21,6 @@ collections:
           - { label: "Hero Title", name: "hero_title", widget: "string" }
           - { label: "Hero Subtitle", name: "hero_subtitle", widget: "text" }
 
-  # Collection for portfolio projects
   - name: "portfolio"
     label: "Portfolio"
     folder: "src/content/portfolio"
@@ -52,7 +38,6 @@ collections:
           - { label: "Alt Text", name: "alt", widget: "string" }
       - { label: "Description", name: "description", widget: "markdown" }
 
-  # Collection for blog posts
   - name: "blog"
     label: "Blog Posts"
     folder: "src/content/blog"
