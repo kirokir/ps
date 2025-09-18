@@ -1,44 +1,37 @@
-# =========================================================================
-# === This is the correct backend configuration for local development ===
-# The 'test-repo' backend tells the CMS to work directly with local files
-# without asking for a login. It does not connect to GitHub.
-# =========================================================================
+# This backend is for local development. It uses the file system and requires no login.
 backend:
   name: test-repo
 
-# Media configuration with Cloudinary
+# When you deploy to Netlify, you will comment out the 'test-repo' backend
+# and uncomment the 'git-gateway' backend below.
+# backend:
+#   name: git-gateway
+#   branch: main
+
+# Where to store uploaded images. Cloudinary is the primary.
 media_library:
   name: cloudinary
   config:
-    cloud_name: 'YOUR_CLOUD_NAME_HERE' # IMPORTANT: Replace with your Cloudinary cloud name
-    api_key: '685338551245488'
-    multiple: true
-    folder: photofirm
-
-# Where to store uploaded media if not using Cloudinary (for local testing)
-media_folder: "src/assets/images/uploads"
+    cloud_name: "YOUR_CLOUD_NAME_HERE" # IMPORTANT: Replace with your Cloudinary cloud name
+    api_key: "685338551245488"
+media_folder: "src/assets/images/uploads" # Fallback storage location
 public_folder: "/assets/images/uploads"
 
-# Site configuration
-site_url: https://photofirm.com
-display_url: https://photofirm.com
-logo_url: /favicon.svg
-
-# Collections are the different types of content you can edit.
+# The 'collections' property is required and must be a list (indicated by the '-')
 collections:
-  # Home page configuration
+  # Collection for the single home page
   - name: "home"
     label: "Home Page"
     files:
       - label: "Home Page Content"
         name: "home"
-        file: "src/content/home.md"
+        file: "src/content/home/home.md" # Note the correct path
         fields:
           - { label: "Title", name: "title", widget: "string" }
           - { label: "Hero Title", name: "hero_title", widget: "string" }
           - { label: "Hero Subtitle", name: "hero_subtitle", widget: "text" }
-          
-  # Portfolio collection
+
+  # Collection for portfolio projects
   - name: "portfolio"
     label: "Portfolio"
     folder: "src/content/portfolio"
@@ -48,9 +41,15 @@ collections:
       - { label: "Title", name: "title", widget: "string" }
       - { label: "Date", name: "date", widget: "datetime" }
       - { label: "Cover Image", name: "cover_image", widget: "image" }
+      - label: "Gallery"
+        name: "gallery"
+        widget: "list"
+        fields:
+          - { label: "Image", name: "image", widget: "image" }
+          - { label: "Alt Text", name: "alt", widget: "string" }
       - { label: "Description", name: "description", widget: "markdown" }
-      
-  # Blog collection
+
+  # Collection for blog posts
   - name: "blog"
     label: "Blog Posts"
     folder: "src/content/blog"

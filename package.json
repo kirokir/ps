@@ -1,10 +1,10 @@
 {
-  "name": "photofirm-website",
+  "name": "lenvow-website",
   "type": "module",
   "version": "1.0.0",
   "description": "Production-grade photography studio website built with Astro and DecapCMS",
   "scripts": {
-    "dev": "astro dev",
+    "dev": "astro dev --host",
     "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
@@ -54,6 +54,6 @@
     "portfolio",
     "static-site"
   ],
-  "author": "PhotoFirm Studio",
+  "author": "Lenvow",
   "license": "MIT"
 }

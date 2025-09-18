@@ -18,12 +18,12 @@ export interface Props {
 
 const {
   title,
-  description = "PhotoFirm - Premier photography and videography studio specializing in weddings, commercial work, and creative storytelling. Capturing moments that last a lifetime.",
+  description = "Lenvow - Premier photography and videography studio specializing in weddings, commercial work, and creative storytelling. Capturing moments that last a lifetime.",
   image = "/images/og-default.jpg",
   type = "website",
   publishedTime,
   modifiedTime,
-  author = "PhotoFirm Studio",
+  author = "Lenvow Studio",
   keywords = ["photography", "videography", "wedding photographer", "commercial photography", "portrait photography", "destination wedding", "creative studio"],
   noindex = false,
   canonicalURL
@@ -100,7 +100,7 @@ const jsonLD = {
   <meta property="og:image" content={imageURL} />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
-  <meta property="og:site_name" content="PhotoFirm Studio" />
+  <meta property="og:site_name" content="Lenvow" />
   <meta property="og:locale" content="en_US" />
   
   <!-- Article specific Open Graph tags -->
@@ -127,11 +127,6 @@ const jsonLD = {
   
   <!-- Structured Data -->
   <script type="application/ld+json" set:html={JSON.stringify(jsonLD)} />
-  
-  <!-- 
-    2. The incorrect <link rel="stylesheet" href="/src/styles/global.css" /> 
-    has been removed from here. The 'import' at the top of the file now handles this.
-  -->
 </head>
 
 <body class="bg-beige-50 dark:bg-gray-900">

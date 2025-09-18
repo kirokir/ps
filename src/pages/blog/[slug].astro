@@ -1,18 +1,66 @@
 ---
 import { getCollection } from 'astro:content';
-import ArticleLayout from '../../layouts/ArticleLayout.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Navbar from '../../components/Navbar.astro';
+import Footer from '../../components/Footer.astro';
 
+// This function generates a page for every file in src/content/portfolio
 export async function getStaticPaths() {
-  const blogEntries = await getCollection('blog');
-  return blogEntries.map(entry => ({
+  const portfolioEntries = await getCollection('portfolio');
+  return portfolioEntries.map(entry => ({
     params: { slug: entry.slug },
     props: { entry },
   }));
 }
 
 const { entry } = Astro.props;
-const { Content } = await entry.render();
+const { Content } = await entry.render(); // This renders the 'description' markdown
+const project = entry.data;
+
+const formattedDate = new Date(project.date).toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
 ---
-<ArticleLayout content={entry.data}>
-  <Content />
-</ArticleLayout>
+<BaseLayout title={project.title} description={`Portfolio project: ${project.title}`}>
+  <Navbar slot="nav" />
+  <main class="py-16 lg:py-24">
+    <div class="container-custom max-w-5xl mx-auto">
+      
+      <!-- Project Header -->
+      <header class="text-center mb-12">
+        <h1 class="text-4xl lg:text-6xl font-serif mb-4">{project.title}</h1>
+        <time datetime={project.date.toISOString()} class="text-lg text-brand-dark/70 dark:text-brand-light/70">
+          {formattedDate}
+        </time>
+      </header>
+      
+      <!-- Cover Image -->
+      <img src={project.cover_image} alt={project.title} class="w-full rounded-2xl shadow-lg mb-12 object-cover aspect-video" />
+      
+      <!-- Project Description -->
+      <div class="prose prose-lg dark:prose-invert max-w-3xl mx-auto mb-16 prose-p:font-sans prose-p:text-xl">
+        <Content />
+      </div>
+      
+      <!-- Photo Gallery Grid -->
+      {project.gallery && project.gallery.length > 0 && (
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
+          {project.gallery.map(item => (
+            <div class="overflow-hidden rounded-lg shadow-md">
+              <img 
+                src={item.image} 
+                alt={item.alt} 
+                class="w-full h-full object-cover aspect-square transition-transform duration-300 hover:scale-105"
+                loading="lazy"
+              />
+            </div>
+          ))}
+        </div>
+      )}
+
+    </div>
+  </main>
+  <Footer slot="footer" />
+</BaseLayout>

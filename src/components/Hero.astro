@@ -3,249 +3,86 @@ export interface Props {
   title: string;
   subtitle: string;
   images?: string[];
-  videoUrl?: string;
   ctaPrimary?: { text: string; href: string };
   ctaSecondary?: { text: string; href: string };
 }
-
 const {
-  title = "Capturing Life's Most Beautiful Moments",
-  subtitle = "Award-winning photography and videography studio specializing in weddings, portraits, and commercial work. We transform fleeting moments into timeless memories.",
+  title = "Timeless Moments, Artfully Captured",
+  subtitle = "Lenvow is a creative studio dedicated to preserving your most cherished memories through elegant photography and cinematic videography.",
   images = [
-    "https://res.cloudinary.com/demo/image/upload/c_fill,w_1920,h_1080,q_auto,f_auto/sample",
-    "https://res.cloudinary.com/demo/image/upload/c_fill,w_1920,h_1080,q_auto,f_auto/samples/people/kitchen-bar",
-    "https://res.cloudinary.com/demo/image/upload/c_fill,w_1920,h_1080,q_auto,f_auto/samples/people/jazz"
+    "https://res.cloudinary.com/demo/image/upload/c_fill,w_1920,h_1080,q_auto,f_auto/e_improve,w_1920,h_1080,c_fill,g_auto/v1/samples/landscapes/beach-boat.jpg",
+    "https://res.cloudinary.com/demo/image/upload/e_improve,w_1920,h_1080,c_fill,g_auto/v1/samples/people/smiling-man.jpg",
+    "https://res.cloudinary.com/demo/image/upload/e_improve,w_1920,h_1080,c_fill,g_auto/v1/samples/people/woman-in-white-dress.jpg"
   ],
-  videoUrl,
-  ctaPrimary = { text: "View Portfolio", href: "/portfolio" },
-  ctaSecondary = { text: "Book Session", href: "/contact" }
+  ctaPrimary = { text: "View Our Work", href: "/portfolio" },
+  ctaSecondary = { text: "Book a Session", href: "/contact" }
 } = Astro.props;
 ---
 
-<section class="relative h-screen min-h-[600px] flex items-center justify-center overflow-hidden">
-  <!-- Background Carousel/Video -->
+<section class="relative h-screen min-h-[700px] flex items-center justify-center overflow-hidden">
+  
+  <!-- Background Container -->
   <div class="absolute inset-0 z-0">
-    {videoUrl ? (
-      <!-- Video Background -->
-      <video
-        class="hero-video"
-        autoplay
-        muted
-        loop
-        playsinline
-        poster={images[0]}
-        aria-label="Hero background video"
-      >
-        <source src={videoUrl} type="video/mp4" />
-        <!-- Fallback image if video fails -->
-        <img src={images[0]} alt="Hero background" class="hero-video" />
-      </video>
-    ) : (
-      <!-- Image Carousel -->
-      <div class="swiper hero-swiper w-full h-full">
-        <div class="swiper-wrapper">
-          {images.map((image, index) => (
-            <div class="swiper-slide">
-              <img
-                src={image}
-                alt={`Hero image ${index + 1}`}
-                class="w-full h-full object-cover"
-                loading={index === 0 ? "eager" : "lazy"}
-                decoding="async"
-              />
-            </div>
-          ))}
-        </div>
+    <div class="swiper hero-swiper w-full h-full">
+      <div class="swiper-wrapper">
+        {images.map((image, index) => (
+          <div class="swiper-slide">
+            <img 
+              src={image} 
+              alt={`Hero image ${index + 1}`} 
+              class="w-full h-full object-cover" 
+              loading={index === 0 ? "eager" : "lazy"}
+              width="1920"
+              height="1080"
+            />
+          </div>
+        ))}
       </div>
-    )}
-    
-    <!-- Gradient Overlay -->
+    </div>
     <div class="hero-overlay absolute inset-0 z-10"></div>
   </div>
 
-  <!-- Content -->
-  <div class="relative z-20 text-center px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto">
+  <!-- Content Section -->
+  <div class="relative z-20 text-center px-4 max-w-5xl mx-auto">
     <div class="animate-fade-in">
-      <!-- Main Headline -->
-      <h1 class="text-4xl sm:text-5xl lg:text-7xl font-serif font-bold text-white mb-6 leading-tight text-shadow-lg">
-        <span class="bg-gradient-to-r from-white via-beige-100 to-gold-200 bg-clip-text text-transparent">
-          {title}
-        </span>
+      <h1 class="text-5xl sm:text-6xl lg:text-8xl font-serif text-white mb-6 leading-tight drop-shadow-md">
+        {title}
       </h1>
-      
-      <!-- Subtitle -->
-      <p class="text-lg sm:text-xl lg:text-2xl text-beige-100 mb-8 max-w-3xl mx-auto leading-relaxed text-shadow animation-delay-200 animate-slide-up">
+      <p class="text-2xl sm:text-3xl font-sans text-brand-light mb-8 max-w-3xl mx-auto drop-shadow-sm">
         {subtitle}
       </p>
-      
-      <!-- CTA Buttons -->
-      <div class="flex flex-col sm:flex-row gap-4 justify-center items-center animation-delay-400 animate-slide-up">
-        <a
-          href={ctaPrimary.href}
-          class="btn-primary text-lg px-8 py-4 shadow-2xl hover:shadow-royal-500/25 transform hover:scale-105"
-          aria-label={ctaPrimary.text}
-        >
-          {ctaPrimary.text}
-          <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
-          </svg>
-        </a>
-        
-        <a
-          href={ctaSecondary.href}
-          class="glass-card text-white border-white/30 hover:bg-white/20 px-8 py-4 rounded-2xl font-medium text-lg transition-all duration-300 transform hover:scale-105 backdrop-blur-sm"
-          aria-label={ctaSecondary.text}
-        >
-          {ctaSecondary.text}
-        </a>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+        <a href={ctaPrimary.href} class="btn-primary">{ctaPrimary.text}</a>
+        <a href={ctaSecondary.href} class="btn-secondary text-white border-white/50 hover:bg-white/20">{ctaSecondary.text}</a>
       </div>
     </div>
   </div>
 
-  <!-- Scroll Indicator -->
-  <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20 animate-bounce">
-    <button
-      onclick="document.getElementById('about-section').scrollIntoView({ behavior: 'smooth' })"
-      class="text-white/80 hover:text-white transition-colors duration-200 p-2"
-      aria-label="Scroll to about section"
-    >
-      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
-      </svg>
+  <!-- Scroll Down Indicator -->
+  <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-20">
+    <button onclick="document.querySelector('main').scrollIntoView({ behavior: 'smooth' })" class="text-white/80 hover:text-white transition-opacity duration-300 p-2" aria-label="Scroll down">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
     </button>
   </div>
-
-  <!-- Decorative Elements -->
-  <div class="absolute top-20 left-10 w-20 h-20 bg-gradient-to-br from-gold-400/20 to-transparent rounded-full blur-xl animate-float"></div>
-  <div class="absolute bottom-20 right-10 w-32 h-32 bg-gradient-to-br from-royal-400/20 to-transparent rounded-full blur-xl animate-float animation-delay-400"></div>
 </section>
 
-<!-- Swiper CSS -->
+<!-- Swiper CSS & JS -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
+<!-- Initialize Swiper -->
 <script>
-  import { Swiper } from 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.mjs';
-
-  // Initialize Swiper for hero carousel if not using video
-  const heroSwiper = document.querySelector('.hero-swiper');
-  
-  if (heroSwiper) {
-    new Swiper('.hero-swiper', {
-      loop: true,
-      autoplay: {
-        delay: 5000,
-        disableOnInteraction: false,
-      },
-      effect: 'fade',
-      fadeEffect: {
-        crossFade: true
-      },
-      speed: 1000,
-      allowTouchMove: false,
-      preloadImages: false,
-      lazy: {
-        loadPrevNext: true,
-      }
-    });
-  }
-
-  // Parallax effect for hero background
-  const heroSection = document.querySelector('section');
-  const heroOverlay = document.querySelector('.hero-overlay');
-  
-  window.addEventListener('scroll', () => {
-    const scrolled = window.pageYOffset;
-    const rate = scrolled * -0.5;
-    
-    if (heroSection) {
-      heroSection.style.transform = `translateY(${rate}px)`;
+  document.addEventListener('DOMContentLoaded', function () {
+    if (document.querySelector('.hero-swiper')) {
+      // @ts-ignore - This tells TypeScript to ignore this line, as we know the Swiper class
+      // will be available globally from the script tag we loaded above.
+      const swiper = new Swiper('.hero-swiper', {
+        loop: true,
+        autoplay: { delay: 5000 },
+        effect: 'fade',
+        speed: 1000,
+        allowTouchMove: false,
+      });
     }
-  });
-
-  // Preload critical images for better LCP
-  const preloadImage = (src) => {
-    const link = document.createElement('link');
-    link.rel = 'preload';
-    link.as = 'image';
-    link.href = src;
-    document.head.appendChild(link);
-  };
-
-  // Preload first hero image
-  const firstImage = document.querySelector('.swiper-slide img');
-  if (firstImage) {
-    preloadImage(firstImage.src);
-  }
-
-  // Intersection Observer for animations
-  const observerOptions = {
-    threshold: 0.1,
-    rootMargin: '-50px'
-  };
-
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('animate-fade-in');
-      }
-    });
-  }, observerOptions);
-
-  // Observe elements for animation
-  document.querySelectorAll('[data-animate]').forEach(el => {
-    observer.observe(el);
   });
 </script>
-
-<style>
-  /* Custom styles for hero section */
-  .hero-swiper {
-    width: 100%;
-    height: 100%;
-  }
-  
-  .hero-swiper .swiper-slide {
-    background-position: center;
-    background-size: cover;
-  }
-  
-  .hero-swiper .swiper-slide img {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  
-  /* Gradient overlay styles */
-  .hero-overlay {
-    background: linear-gradient(
-      45deg,
-      rgba(79, 70, 229, 0.7) 0%,
-      rgba(196, 181, 145, 0.5) 50%,
-      rgba(245, 158, 11, 0.6) 100%
-    );
-  }
-  
-  /* Responsive text sizing */
-  @media (max-width: 640px) {
-    h1 {
-      font-size: 2.5rem;
-      line-height: 1.2;
-    }
-  }
-  
-  /* Performance optimizations */
-  .swiper-slide img {
-    will-change: transform;
-  }
-  
-  /* Dark mode adjustments */
-  .dark .hero-overlay {
-    background: linear-gradient(
-      45deg,
-      rgba(59, 130, 246, 0.8) 0%,
-      rgba(139, 69, 19, 0.6) 50%,
-      rgba(245, 158, 11, 0.7) 100%
-    );
-  }
-</style>

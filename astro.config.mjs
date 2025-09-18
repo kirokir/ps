@@ -1,55 +1,64 @@
-import { defineConfig } from 'astro/config';
-import tailwind from '@astrojs/tailwind';
-import sitemap from '@astrojs/sitemap';
+import { defineConfig } from "astro/config";
+import tailwind from "@astrojs/tailwind";
+import sitemap from "@astrojs/sitemap";
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://photofirm.com',
-  output: 'static',
-  trailingSlash: 'never',
-
-  // ===================================================================
-  // === FIX: Add this redirects block to force the admin route     ===
-  // This tells the dev server: "When a request for /admin comes in,
-  // serve the file /admin/index.html instead of trying to find a page."
-  // ===================================================================
-  redirects: {
-    '/admin': '/admin/index.html'
-  },
+  site: "https://photofirm.com",
+  output: "static",
+  trailingSlash: "never",
 
   integrations: [
     tailwind({
       applyBaseStyles: false,
     }),
-    sitemap({
-      changefreq: 'weekly',
-      priority: 0.7,
-      lastmod: new Date(),
-    })
+    sitemap(),
   ],
+
+  // ===================================================================
+  // === FIX: Add advanced Vite server configuration for Codespaces  ===
+  // ===================================================================
   vite: {
-    build: {
-      rollupOptions: {
-        external: ['sharp']
-      }
+    server: {
+      watch: {
+        // Force Vite to use polling. This is less efficient but required
+        // for file system event detection in some virtual environments.
+        usePolling: true,
+        interval: 1000, // Check for file changes every second
+      },
+      fs: {
+        // Be less strict about file system access.
+        strict: false,
+      },
     },
-    ssr: {
-      external: ['sharp']
-    }
+    plugins: [
+      {
+        // Custom plugin to manually fix the /admin/ route.
+        name: "admin-route-fix",
+        configureServer(server) {
+          server.middlewares.use((req, res, next) => {
+            // If the browser requests the admin directory...
+            if (req.url === "/admin/") {
+              // ...rewrite the URL to point directly to the HTML file.
+              req.url = "/admin/index.html";
+            }
+            // Pass the request to the next handler.
+            next();
+          });
+        },
+      },
+    ],
   },
+
   image: {
-    domains: ['res.cloudinary.com'],
-    remotePatterns: [{
-      protocol: 'https',
-      hostname: 'res.cloudinary.com',
-    }],
+    domains: ["res.cloudinary.com"],
   },
   compressHTML: true,
   build: {
-    inlineStylesheets: 'auto'
+    inlineStylesheets: "auto",
   },
   prefetch: {
     prefetchAll: true,
-    defaultStrategy: 'viewport'
-  }
+    defaultStrategy: "viewport",
+  },
 });

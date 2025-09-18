@@ -1,51 +1,38 @@
 {
-  "name": "PhotoFirm Website Development",
-  "image": "mcr.microsoft.com/devcontainers/javascript-node:20",
+  "name": "Lenvow Website Development",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:1-20-bullseye",
   "features": {
     "ghcr.io/devcontainers/features/github-cli:1": {}
   },
+
+  // FIX: Add environment variables for the container
+  "remoteEnv": {
+    "CHOKIDAR_USEPOLLING": "true"
+  },
+
   "customizations": {
     "vscode": {
       "extensions": [
         "astro-build.astro-vscode",
         "bradlc.vscode-tailwindcss",
         "esbenp.prettier-vscode",
-        "dbaeumer.vscode-eslint",
-        "ms-playwright.playwright",
-        "formulahendry.auto-rename-tag",
-        "christian-kohler.path-intellisense",
-        "ms-vscode.vscode-typescript-next"
+        "dbaeumer.vscode-eslint"
       ],
       "settings": {
         "editor.formatOnSave": true,
-        "editor.defaultFormatter": "esbenp.prettier-vscode",
-        "editor.codeActionsOnSave": {
-          "source.fixAll.eslint": "explicit"
-        },
-        "emmet.includeLanguages": {
-          "astro": "html"
-        },
-        "files.associations": {
-          "*.astro": "astro"
-        },
-        "editor.quickSuggestions": {
-          "strings": true
-        },
-        "typescript.preferences.quoteStyle": "single",
-        "javascript.preferences.quoteStyle": "single"
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
       }
     }
   },
-  "forwardPorts": [3000, 4321],
+  "forwardPorts": [4321],
   "portsAttributes": {
-    "3000": {
-      "label": "Astro Dev Server",
-      "onAutoForward": "notify"
-    },
     "4321": {
-      "label": "Astro Preview Server",
-      "onAutoForward": "notify"
+      "label": "Astro Dev Server",
+      "onAutoForward": "openBrowser",
+      // FIX: Ensure the port is publicly accessible
+      "access": "public"
     }
   },
-  "postCreateCommand": "npm install"
+  "postCreateCommand": "npm install",
+  "remoteUser": "node"
 }

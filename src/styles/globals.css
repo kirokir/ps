@@ -1,11 +1,11 @@
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
 
-/* Font loading optimization */
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+/* Import the Google Fonts */
+@import url("https://fonts.googleapis.com/css2?family=Croissant+One&family=Niconne&display=swap");
 
-/* CSS Reset and base styles */
+/* Base styles */
 *,
 *::before,
 *::after {
@@ -16,48 +16,64 @@
 
 html {
   scroll-behavior: smooth;
-  font-feature-settings: 'cv11', 'ss01';
-  font-variation-settings: 'opsz' 32;
 }
 
 body {
-  font-family: 'Inter', sans-serif;
-  line-height: 1.6;
-  color: theme('colors.gray.800');
-  background: linear-gradient(135deg, #f9f6ee 0%, #f0eadb 100%);
+  font-family: theme("fontFamily.sans"); /* Niconne */
+  font-size: 18px;
+  line-height: 1.8;
+  color: #3d2e1b; /* Darker brown for contrast */
+  background: linear-gradient(
+    135deg,
+    theme("colors.brand-beige") 0%,
+    theme("colors.brand-tan") 100%
+  );
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Dark mode styles */
-.dark body {
-  color: theme('colors.gray.100');
-  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+/* Apply Croissant One to all headings */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  @apply font-serif;
+  letter-spacing: 0.05em;
 }
 
-/* Skip to content for accessibility */
+/* Dark mode styles */
+.dark body {
+  color: theme("colors.brand-light");
+  background: #3d2e1b;
+}
+
+/* ====================================================================== */
+/* === FIX: Correctly hide the 'Skip to main content' link off-screen === */
+/* ====================================================================== */
 .skip-to-content {
-  position: absolute;
-  top: -40px;
-  left: 6px;
-  background: theme('colors.royal.600');
+  position: absolute; /* Changed from relative/static to absolute */
+  top: 1rem;
+  left: 1rem;
+  background: theme("colors.brand-dark");
   color: white;
-  padding: 8px;
+  padding: 0.5rem 1rem;
   text-decoration: none;
-  border-radius: 4px;
-  z-index: 1000;
-  transform: translateY(-100%);
-  transition: transform 0.3s;
+  border-radius: 8px;
+  z-index: 9999;
+  transform: translateY(-150%); /* Start hidden far off-screen */
+  transition: transform 0.3s ease-in-out;
 }
 
 .skip-to-content:focus {
-  transform: translateY(0%);
+  transform: translateY(0); /* Bring into view only on focus */
 }
 
 /* Focus styles for accessibility */
 *:focus-visible {
-  outline: 2px solid theme('colors.royal.500');
+  outline: 2px solid #3d2e1b;
   outline-offset: 2px;
   border-radius: 2px;
 }
@@ -70,16 +86,18 @@ body {
   background: rgba(0, 0, 0, 0.1);
 }
 ::-webkit-scrollbar-thumb {
-  background: theme('colors.royal.500');
+  background: #3d2e1b;
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: theme('colors.royal.600');
+  background: #5a452a;
 }
 
 /* Reduced motion support */
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
@@ -89,111 +107,30 @@ body {
 
 /* Custom utility classes */
 @layer utilities {
-  .text-balance { text-wrap: balance; }
-  .animation-delay-200 { animation-delay: 200ms; }
-  .animation-delay-400 { animation-delay: 400ms; }
-  .animation-delay-600 { animation-delay: 600ms; }
+  .text-balance {
+    text-wrap: balance;
+  }
 }
 
 /* Component styles */
 @layer components {
   .btn-primary {
-    @apply inline-flex items-center justify-center px-6 py-3 text-base font-medium text-white bg-royal-600 border border-transparent rounded-2xl shadow-lg hover:bg-royal-700 focus:outline-none focus:ring-2 focus:ring-royal-500 focus:ring-offset-2 transition-all duration-200 transform hover:scale-105;
+    @apply inline-flex items-center justify-center px-6 py-3 text-base font-medium text-white bg-[#3D2E1B] border border-transparent rounded-full shadow-lg hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-[#3D2E1B] focus:ring-offset-2 transition-all duration-200 transform hover:scale-105;
   }
-  
+
   .btn-secondary {
-    @apply inline-flex items-center justify-center px-6 py-3 text-base font-medium text-royal-700 bg-transparent border-2 border-royal-600 rounded-2xl shadow-sm hover:bg-royal-50 focus:outline-none focus:ring-2 focus:ring-royal-500 focus:ring-offset-2 transition-all duration-200;
+    @apply inline-flex items-center justify-center px-6 py-3 text-base font-medium text-[#3D2E1B] bg-transparent border-2 border-[#3D2E1B] rounded-full shadow-sm hover:bg-brand-light/50 focus:outline-none focus:ring-2 focus:ring-[#3D2E1B] focus:ring-offset-2 transition-all duration-200;
   }
-  
-  .btn-ghost {
-    @apply inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-gray-700 bg-transparent hover:bg-gray-100 rounded-xl transition-colors duration-200;
-  }
-  
-  /* ================================================= */
-  /* === FIX: Define the missing .glass-card class === */
-  /* ================================================= */
-  .glass-card {
-    @apply bg-white/30 dark:bg-gray-800/30 backdrop-blur-lg border border-white/20;
-  }
-  
-  /* Now the .card class can successfully @apply it */
+
   .card {
-    @apply glass-card rounded-2xl p-6 shadow-xl transition-all duration-300 hover:shadow-2xl hover:-translate-y-1;
+    @apply bg-brand-light/70 dark:bg-[#2a2014]/70 backdrop-blur-md border border-white/20 rounded-2xl p-6 shadow-xl transition-all duration-300 hover:shadow-2xl hover:-translate-y-1;
   }
-  
+
   .section-padding {
     @apply py-16 lg:py-24;
   }
-  
+
   .container-custom {
     @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
-  }
-}
-
-/* Hero video background styles */
-.hero-video {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  z-index: -1;
-}
-
-.hero-overlay {
-  background: linear-gradient(45deg, rgba(79, 70, 229, 0.8), rgba(196, 181, 145, 0.6));
-}
-
-/* Loading states */
-.loading {
-  position: relative;
-  overflow: hidden;
-}
-
-.loading::after {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  transform: translateX(-100%);
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  animation: shimmer 2s infinite;
-  content: '';
-}
-
-@keyframes shimmer {
-  100% {
-    transform: translateX(100%);
-  }
-}
-
-/* Image optimization */
-img {
-  max-width: 100%;
-  height: auto;
-}
-
-.lazy-img {
-  filter: blur(5px);
-  transition: filter 0.3s;
-}
-
-.lazy-img.loaded {
-  filter: none;
-}
-
-/* Print styles */
-@media print {
-  .no-print {
-    display: none;
-  }
-  
-  * {
-    background: transparent !important;
-    color: black !important;
-    box-shadow: none !important;
-    text-shadow: none !important;
   }
 }

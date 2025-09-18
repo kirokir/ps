@@ -13,468 +13,112 @@ export interface PortfolioItem {
 export interface Props {
   items: PortfolioItem[];
   showFilters?: boolean;
-  columns?: 'auto' | '2' | '3' | '4';
-  showLoadMore?: boolean;
-  initialItems?: number;
 }
 
-const {
-  items = [],
-  showFilters = true,
-  columns = 'auto',
-  showLoadMore = false,
-  initialItems = 12
-} = Astro.props;
-
-// Extract unique categories for filters
-const allCategories = [...new Set(items.flatMap(item => item.category))];
-const categories = ['All', ...allCategories];
-
-// Column classes mapping
-const columnClasses = {
-  '2': 'grid-cols-1 md:grid-cols-2',
-  '3': 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3',
-  '4': 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4',
-  'auto': 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'
-};
+const { items = [], showFilters = true } = Astro.props;
+const allCategories = ['All', ...new Set(items.flatMap(item => item.category))];
 ---
-
-<section class="section-padding bg-beige-50 dark:bg-gray-900" id="portfolio-section">
+<section class="section-padding" id="portfolio-section">
   <div class="container-custom">
-    <!-- Section Header -->
     <div class="text-center mb-16">
-      <h2 class="text-3xl sm:text-4xl lg:text-5xl font-serif font-bold text-gray-900 dark:text-white mb-4">
-        Our Portfolio
-      </h2>
-      <p class="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-        Every image tells a story. Explore our collection of weddings, portraits, and commercial work that showcase our passion for capturing authentic moments.
-      </p>
+      <h2 class="text-3xl sm:text-4xl lg:text-5xl font-serif mb-4">Our Portfolio</h2>
+      <p class="text-lg text-brand-dark/80 dark:text-brand-light/80 max-w-3xl mx-auto">Explore our collection of weddings, portraits, and commercial work.</p>
     </div>
 
-    <!-- Filter Buttons -->
     {showFilters && (
-      <div class="mb-12">
-        <div class="flex flex-wrap justify-center gap-3 sm:gap-4" role="group" aria-label="Portfolio filters">
-          {categories.map((category) => (
-            <button
-              class="portfolio-filter px-4 py-2 sm:px-6 sm:py-3 rounded-2xl text-sm sm:text-base font-medium transition-all duration-300 border-2 hover:scale-105"
-              data-filter={category.toLowerCase()}
-              data-category={category}
-              aria-label={`Filter by ${category}`}
-            >
-              {category}
-            </button>
-          ))}
-        </div>
+      <div class="mb-12 flex flex-wrap justify-center gap-3 sm:gap-4" role="group" aria-label="Portfolio filters">
+        {allCategories.map(category => (
+          <button
+            class="portfolio-filter px-4 py-2 sm:px-6 sm:py-3 rounded-2xl text-sm sm:text-base font-medium transition-all duration-300 border-2"
+            data-filter={category.toLowerCase()}
+          >
+            {category}
+          </button>
+        ))}
       </div>
     )}
 
-    <!-- Portfolio Grid -->
-    <div
-      class={`grid gap-6 lg:gap-8 ${columnClasses[columns]} portfolio-grid`}
-      id="portfolio-grid"
-    >
-      {items.slice(0, showLoadMore ? initialItems : items.length).map((item, index) => (
-        <article
-          class="portfolio-item group cursor-pointer transform transition-all duration-500 hover:scale-105"
-          data-categories={item.category.map(cat => cat.toLowerCase()).join(' ')}
-          data-index={index}
-        >
-          <div class="card overflow-hidden h-full bg-white dark:bg-gray-800">
-            <!-- Image Container -->
-            <div class="relative overflow-hidden aspect-[4/3]">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8" id="portfolio-grid">
+      {items.map((item, index) => (
+        <article class="portfolio-item group" data-categories={item.category.map(c => c.toLowerCase()).join(' ')}>
+          <div class="card overflow-hidden h-full p-0">
+            <a href={`/portfolio/${item.slug}`} class="block relative overflow-hidden aspect-[4/3]">
               <img
                 src={`${item.image}?w=600&h=450&c_fill&q_auto&f_auto`}
                 alt={item.title}
                 class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                loading={index < 4 ? 'eager' : 'lazy'}
+                loading={index < 3 ? 'eager' : 'lazy'}
                 decoding="async"
-                data-lazy={index >= 4 ? `${item.image}?w_800&h_600&c_fill&q_auto&f_auto` : undefined}
               />
-              
-              <!-- Overlay -->
-              <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <div class="absolute bottom-4 left-4 right-4 text-white transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-                  <div class="flex items-center space-x-2 text-sm mb-2">
-                    {item.category.map((cat, idx) => (
-                      <span
-                        class="px-2 py-1 bg-white/20 backdrop-blur-sm rounded-lg text-xs font-medium"
-                        key={idx}
-                      >
-                        {cat}
-                      </span>
-                    ))}
-                  </div>
-                  {item.location && (
-                    <p class="text-sm text-beige-200 flex items-center">
-                      <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                      </svg>
-                      {item.location}
-                    </p>
-                  )}
-                </div>
-                
-                <!-- View Button -->
-                <div class="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-300 transform scale-75 group-hover:scale-100">
-                  <div class="bg-white/20 backdrop-blur-sm rounded-full p-2">
-                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                    </svg>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Content -->
+              <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+            </a>
             <div class="p-4 sm:p-6">
-              <h3 class="text-lg sm:text-xl font-serif font-semibold text-gray-900 dark:text-white mb-2 line-clamp-2">
-                {item.title}
-              </h3>
-              
-              <div class="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400">
-                <time datetime={item.date} class="flex items-center">
-                  <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                  </svg>
-                  {new Date(item.date).toLocaleDateString('en-US', { 
-                    year: 'numeric', 
-                    month: 'short' 
-                  })}
-                </time>
-                
-                {item.client && (
-                  <span class="text-royal-600 dark:text-royal-400 font-medium">
-                    {item.client}
-                  </span>
-                )}
+              <h3 class="text-lg sm:text-xl font-serif mb-2 line-clamp-2">{item.title}</h3>
+              <div class="flex items-center justify-between text-sm text-brand-dark/70 dark:text-brand-light/70">
+                <time datetime={item.date}>{new Date(item.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short' })}</time>
+                {item.client && <span class="font-medium">{item.client}</span>}
               </div>
             </div>
-
-            <!-- Link overlay for accessibility -->
-            <a
-              href={`/portfolio/${item.slug}`}
-              class="absolute inset-0 z-10"
-              aria-label={`View ${item.title} portfolio`}
-            ></a>
           </div>
         </article>
       ))}
-    </div>
-
-    <!-- Load More Button -->
-    {showLoadMore && items.length > initialItems && (
-      <div class="text-center mt-12">
-        <button
-          id="load-more-btn"
-          class="btn-secondary"
-          data-initial={initialItems}
-          data-increment="6"
-        >
-          Load More Projects
-          <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-          </svg>
-        </button>
-      </div>
-    )}
-
-    <!-- No results message -->
-    <div id="no-results" class="hidden text-center py-16">
-      <div class="glass-card max-w-md mx-auto p-8 rounded-2xl">
-        <svg class="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-        </svg>
-        <h3 class="text-xl font-serif font-semibold text-gray-900 dark:text-white mb-2">
-          No projects found
-        </h3>
-        <p class="text-gray-600 dark:text-gray-300">
-          Try selecting a different category or view all projects.
-        </p>
-      </div>
     </div>
   </div>
 </section>
 
 <script>
-  // Portfolio filtering functionality
   class PortfolioFilter {
     constructor() {
       this.filterButtons = document.querySelectorAll('.portfolio-filter');
-      this.portfolioItems = document.querySelectorAll('.portfolio-item');
-      this.noResultsMessage = document.getElementById('no-results');
-      this.loadMoreBtn = document.getElementById('load-more-btn');
-      this.currentFilter = 'all';
-      this.itemsPerPage = parseInt(this.loadMoreBtn?.dataset.increment || '6');
-      this.visibleItems = parseInt(this.loadMoreBtn?.dataset.initial || '12');
+      if (!this.filterButtons.length) return;
       
+      this.portfolioItems = document.querySelectorAll('.portfolio-item');
+      this.currentFilter = 'all';
       this.init();
     }
 
     init() {
-      // Set initial active filter
       this.setActiveFilter('all');
-      
-      // Add click listeners to filter buttons
       this.filterButtons.forEach(button => {
-        button.addEventListener('click', (e) => {
-          const filter = e.target.dataset.filter;
-          this.filterPortfolio(filter);
-          this.setActiveFilter(filter);
-        });
+        button.addEventListener('click', (e) => this.handleFilterClick(e.target.dataset.filter));
       });
-
-      // Load more functionality
-      this.loadMoreBtn?.addEventListener('click', () => {
-        this.loadMoreItems();
-      });
-
-      // Initialize intersection observer for animations
-      this.initAnimations();
     }
 
+    handleFilterClick(filter) {
+      this.currentFilter = filter;
+      this.setActiveFilter(filter);
+      this.filterPortfolio(filter);
+    }
+    
+    // === FIX: Updated color classes to use the new theme ===
     setActiveFilter(activeFilter) {
       this.filterButtons.forEach(button => {
         const isActive = button.dataset.filter === activeFilter;
-        button.classList.toggle('bg-royal-600', isActive);
+        button.classList.toggle('bg-brand-dark', isActive);
         button.classList.toggle('text-white', isActive);
-        button.classList.toggle('border-royal-600', isActive);
+        button.classList.toggle('border-brand-dark', isActive);
         button.classList.toggle('bg-transparent', !isActive);
-        button.classList.toggle('text-gray-700', !isActive && !document.documentElement.classList.contains('dark'));
-        button.classList.toggle('dark:text-gray-300', !isActive);
-        button.classList.toggle('border-gray-300', !isActive);
-        button.classList.toggle('hover:bg-gray-50', !isActive);
-        button.classList.toggle('dark:hover:bg-gray-800', !isActive);
+        button.classList.toggle('text-brand-dark', !isActive);
+        button.classList.toggle('border-brand-tan', !isActive);
       });
     }
 
     filterPortfolio(filter) {
-      this.currentFilter = filter;
-      let visibleCount = 0;
-
-      this.portfolioItems.forEach((item, index) => {
+      this.portfolioItems.forEach(item => {
         const categories = item.dataset.categories;
         const shouldShow = filter === 'all' || categories.includes(filter);
-        
-        if (shouldShow) {
-          visibleCount++;
-          // Show items up to the visible limit
-          if (visibleCount <= this.visibleItems) {
-            this.showItem(item, index * 100);
-          } else {
-            this.hideItem(item);
-          }
-        } else {
-          this.hideItem(item);
-        }
-      });
-
-      // Show/hide no results message
-      if (visibleCount === 0) {
-        this.noResultsMessage?.classList.remove('hidden');
-      } else {
-        this.noResultsMessage?.classList.add('hidden');
-      }
-
-      // Update load more button visibility
-      this.updateLoadMoreButton(visibleCount);
-    }
-
-    showItem(item, delay = 0) {
-      setTimeout(() => {
-        item.classList.remove('hidden', 'opacity-0', 'scale-95');
-        item.classList.add('opacity-100', 'scale-100');
-      }, delay);
-    }
-
-    hideItem(item) {
-      item.classList.add('opacity-0', 'scale-95');
-      setTimeout(() => {
-        item.classList.add('hidden');
-      }, 300);
-    }
-
-    loadMoreItems() {
-      this.visibleItems += this.itemsPerPage;
-      this.filterPortfolio(this.currentFilter);
-    }
-
-    updateLoadMoreButton(totalVisible) {
-      if (!this.loadMoreBtn) return;
-      
-      const hiddenItems = Array.from(this.portfolioItems).filter(item => {
-        const categories = item.dataset.categories;
-        const matchesFilter = this.currentFilter === 'all' || categories.includes(this.currentFilter);
-        return matchesFilter && item.classList.contains('hidden');
-      });
-
-      if (hiddenItems.length === 0) {
-        this.loadMoreBtn.style.display = 'none';
-      } else {
-        this.loadMoreBtn.style.display = 'inline-flex';
-      }
-    }
-
-    initAnimations() {
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('animate-slide-up');
-          }
-        });
-      }, {
-        threshold: 0.1,
-        rootMargin: '50px'
-      });
-
-      this.portfolioItems.forEach(item => {
-        observer.observe(item);
+        item.style.display = shouldShow ? 'block' : 'none';
       });
     }
   }
 
-  // Initialize portfolio filter when DOM is loaded
-  document.addEventListener('DOMContentLoaded', () => {
-    new PortfolioFilter();
-  });
-
-  // Lazy loading for portfolio images
-  const lazyImages = document.querySelectorAll('img[data-lazy]');
-  
-  if ('IntersectionObserver' in window) {
-    const imageObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const img = entry.target;
-          img.src = img.dataset.lazy;
-          img.classList.add('fade-in');
-          imageObserver.unobserve(img);
-        }
-      });
-    });
-
-    lazyImages.forEach(img => {
-      imageObserver.observe(img);
-    });
-  }
-
-  // Keyboard navigation support
-  document.addEventListener('keydown', (e) => {
-    if (e.target.classList.contains('portfolio-filter')) {
-      const buttons = Array.from(document.querySelectorAll('.portfolio-filter'));
-      const currentIndex = buttons.indexOf(e.target);
-      
-      let nextIndex;
-      if (e.key === 'ArrowRight') {
-        nextIndex = (currentIndex + 1) % buttons.length;
-      } else if (e.key === 'ArrowLeft') {
-        nextIndex = (currentIndex - 1 + buttons.length) % buttons.length;
-      }
-      
-      if (nextIndex !== undefined) {
-        buttons[nextIndex].focus();
-        e.preventDefault();
-      }
-    }
-  });
+  document.addEventListener('DOMContentLoaded', () => new PortfolioFilter());
 </script>
 
 <style>
-  /* Portfolio item animations */
-  .portfolio-item {
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  .portfolio-item:hover {
-    transform: translateY(-8px);
-  }
-
-  /* Filter button animations */
-  .portfolio-filter {
-    transition: all 0.2s ease-in-out;
-  }
-
-  .portfolio-filter:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  }
-
-  /* Image loading animation */
-  .portfolio-item img {
-    transition: opacity 0.3s ease-in-out, transform 0.7s ease-out;
-  }
-
-  .portfolio-item img.fade-in {
-    opacity: 1;
-  }
-
-  /* Masonry-style layout for larger screens */
-  @media (min-width: 1024px) {
-    .portfolio-grid.masonry {
-      column-count: 3;
-      column-gap: 2rem;
-      column-fill: balance;
-    }
-    
-    .portfolio-grid.masonry .portfolio-item {
-      break-inside: avoid;
-      margin-bottom: 2rem;
-      display: inline-block;
-      width: 100%;
-    }
-  }
-
-  /* Focus styles for accessibility */
+  /* === FIX: Replaced 'colors.royal.500' with 'colors.brand-dark' === */
   .portfolio-filter:focus-visible {
-    outline: 2px solid theme('colors.royal.500');
+    outline: 2px solid theme('colors.brand-dark');
     outline-offset: 2px;
-  }
-
-  .portfolio-item:focus-within {
-    transform: translateY(-8px);
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-  }
-
-  /* Dark mode adjustments */
-  .dark .portfolio-item {
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
-  }
-
-  .dark .portfolio-item:hover {
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.3);
-  }
-
-  /* Loading skeleton */
-  .portfolio-item.loading {
-    position: relative;
-    overflow: hidden;
-  }
-
-  .portfolio-item.loading::after {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    transform: translateX(-100%);
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-    animation: shimmer 2s infinite;
-    content: '';
-  }
-
-  @keyframes shimmer {
-    100% {
-      transform: translateX(100%);
-    }
-  }
-
-  /* Line clamp utility for title truncation */
-  .line-clamp-2 {
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
   }
 </style>

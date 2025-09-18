@@ -1,0 +1,27 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+---
+<BaseLayout title="Terms of Service | Lenvow" description="Read the terms and conditions for using the Lenvow website and services.">
+  <Navbar slot="nav" />
+  <main class="section-padding bg-brand-light dark:bg-brand-dark/50">
+    <div class="container-custom max-w-4xl mx-auto prose dark:prose-invert prose-headings:font-serif prose-p:font-sans prose-p:text-lg">
+      <h1>Terms of Service</h1>
+      <p class="text-sm">Last Updated: September 18, 2025</p>
+
+      <h2>1. Agreement to Terms</h2>
+      <p>By accessing our website, you agree to be bound by these Terms of Service. If you disagree with any part of the terms, you may not access the website.</p>
+      
+      <h2>2. Intellectual Property</h2>
+      <p>The Site and its original content, features, and functionality are owned by Lenvow and are protected by international copyright and other intellectual property laws.</p>
+
+      <h2>3. Limitation of Liability</h2>
+      <p>In no event shall Lenvow be liable for any indirect, incidental, or consequential damages arising out of your use of the website or our services.</p>
+
+      <h2>4. Governing Law</h2>
+      <p>These Terms shall be governed in accordance with the laws of our jurisdiction, without regard to its conflict of law provisions.</p>
+    </div>
+  </main>
+  <Footer slot="footer" />
+</BaseLayout>
