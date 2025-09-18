@@ -1,4 +1,4 @@
-# This backend is for local development. It uses the file system and requires no login.
+# Use the test-repo backend for local development (no login required)
 backend:
   name: test-repo
 
@@ -8,16 +8,20 @@ backend:
 #   name: git-gateway
 #   branch: main
 
-# Where to store uploaded images. Cloudinary is the primary.
+# Media library configuration with your verified credentials
 media_library:
   name: cloudinary
   config:
-    cloud_name: "YOUR_CLOUD_NAME_HERE" # IMPORTANT: Replace with your Cloudinary cloud name
+    cloud_name: "dw4fmucml"
     api_key: "685338551245488"
 media_folder: "src/assets/images/uploads" # Fallback storage location
 public_folder: "/assets/images/uploads"
 
-# The 'collections' property is required and must be a list (indicated by the '-')
+# Site & Collection Definitions
+site_url: https://lenvow.com
+display_url: https://lenvow.com
+logo_url: /favicon.svg
+
 collections:
   # Collection for the single home page
   - name: "home"
@@ -25,7 +29,7 @@ collections:
     files:
       - label: "Home Page Content"
         name: "home"
-        file: "src/content/home/home.md" # Note the correct path
+        file: "src/content/home/home.md"
         fields:
           - { label: "Title", name: "title", widget: "string" }
           - { label: "Hero Title", name: "hero_title", widget: "string" }
